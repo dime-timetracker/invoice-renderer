@@ -32,6 +32,9 @@ class Renderer
         if (is_null($this->template)) {
             throw new TemplateNotSetException('Please set the template before rendering!');
         }
+        if (!$args['increment_no']) {
+            throw new IncrementNoNotSetException('Please define an increment no!');
+        }
         $loader = new Twig_Loader_Filesystem(dirname($this->template));
         $twig = new Twig_Environment($loader);
         return $twig->render(basename($this->template), $args);

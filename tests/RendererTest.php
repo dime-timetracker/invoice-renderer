@@ -9,6 +9,7 @@ class RendererTest extends TestCase
         return [
             'sender' => "Homer Simpson\nEvergreen Terrace 42\nSpringfield\n\nUnited States",
             'receiver' => "Mary Poppins\n10 Grena Gardens\nRichmond\nTW9 1XN\nUnited Kingdom",
+            'increment_no' => '109283',
             'columns' => ['task' => 'task', 'duration' => 'duration'],
             'rows' => [['task' => 'Babysitting', 'duration' => '3 hours']],
             'totals' => ['grand total' => '£ 100.00']
