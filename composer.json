@@ -1,0 +1,23 @@
+{
+    "name": "dime-timetracker/invoice-renderer",
+    "description": "Invoice rendering package",
+    "require": {
+        "twig/twig": "^1.24"
+    },
+    "license": "OSL-3.0",
+    "authors": [
+        {
+            "name": "Thomas Birke",
+            "email": "quafzi@netextreme.de"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require-dev": {
+        "phpunit/phpunit": "^5.5"
+    },
+    "autoload": {
+        "psr-0": {
+            "Dime\\InvoiceRenderer\\": "src/"
+        }
+    }
+}

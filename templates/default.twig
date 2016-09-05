@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>{{ title }}</title>
+  </head>
+  <body>
+    <address class="sender"><p>{{ sender|replace({"\n": '</p><p>'})|raw }}</p></address>
+    <div class="in-window sender">{{ sender|replace({"\n": ' – ' }) }}</address>
+    <address class="receiver">{{ receiver }}</address>
+    <header>
+      <div class="document-type">{{ documentType }}</div>
+      <div class="increment-no">{{ incrementNo }}</div>
+      <div class="date">{{ date }}</div>
+    </header>
+    {% if intro %}<p class="intro text">{{ intro|replace({"\n": '<br>'})|raw }}</p>{% endif %}
+    <table>
+      <thead>
+        <tr>
+          {% for key, name in columns %}
+          <th class="{{ key }}">{{ name }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in rows %}
+          <tr class="row">
+            {% for key, name in columns %}
+            <td class="{{ key }}" title="{{ name }}">{{ row[key] }}</td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+      <tfoot>
+        {% for key, total in totals %}
+          <tr>
+            <td class="{{ key }} label">{{ total.title }}</td>
+            <td class="{{ key }} value">{{ total.value }}</td>
+          </tr>
+        {% endfor %}
+      </tfoot>
+    </table>
+    {% if outro %}<p class="outro text">{{ outro|replace({"\n": '<br>'})|raw }}</p>{% endif %}
+    {% if footer %}
+    <footer>
+      {% if footer.left %}
+        <ul class="left">
+          {% for item, key in footer.left %}
+            <li class="{{ item.key }}">{{ item.text }}
+          {% endfor %}
+        </ul>
+      {% endif %}
+      {% if footer.center %}
+        <ul class="center">
+          {% for item, key in footer.center %}
+            <li class="{{ item.key }}">{{ item.text }}
+          {% endfor %}
+        </ul>
+      {% endif %}
+      {% if footer.right %}
+        <ul class="right">
+          {% for item, key in footer.right %}
+            <li class="{{ item.key }}">{{ item.text }}
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </footer>
+    {% endif %}
+  </body>
+</html>
