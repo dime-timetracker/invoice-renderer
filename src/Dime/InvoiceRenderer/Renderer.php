@@ -3,6 +3,7 @@ namespace Dime\InvoiceRenderer;
 
 use \Twig_Environment;
 use \Twig_Loader_Filesystem;
+use \mikehaertl\wkhtmlto\Pdf;
 
 class Renderer
 {
@@ -38,5 +39,11 @@ class Renderer
         $loader = new Twig_Loader_Filesystem(dirname($this->template));
         $twig = new Twig_Environment($loader);
         return $twig->render(basename($this->template), $args);
+    }
+
+    public function pdf ($args)
+    {
+        $pdf = new Pdf($this->html($args));
+        $pdf->send('invoice-' . str_replace('/[^0-9\-_]/', '', $args['increment_no']) . '.pdf');
     }
 }
