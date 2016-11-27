@@ -2,69 +2,188 @@
 <html>
   <head>
     <meta charset="UTF-8" />
+    <style>
+      .doc {
+        font-size: 10pt;
+        height: 980px;
+        margin-top: 50px;
+      }
+      address {
+        font-style: normal;
+        width: 300px;
+      }
+      address.receiver {
+        margin-bottom: 80px;
+      }
+      .in-window.sender {
+        border-bottom: 1px solid black;
+        font-size: 8pt;
+        font-style: italic;
+        margin-top: 80px;
+        padding-bottom: 5px;
+        text-align: center;
+      }
+      header .document-type,
+      header .increment-no {
+        font-weight: bold;
+        display: inline-block;
+        margin-right: 3px;
+      }
+      header .date {
+        float: right;
+      }
+      header {
+        margin-bottom: 30px;
+        width: 100%;
+      }
+      table.items {
+        border-spacing: 0;
+        margin-bottom: 50px;
+        margin-top: 50px;
+        width: 100%;
+      }
+      td.duration, td.price {
+        text-align: right;
+      }
+      thead tr:last-child td,
+      thead tr:last-child th {
+        border-bottom: 1px solid #666;
+        padding-bottom: 5px;
+      }
+      tbody tr td {
+        border-bottom: 1px dotted #aaa;
+      }
+      tbody tr:last-child td {
+        border-bottom: none;
+      }
+      tfoot th,
+      tfoot td {
+        font-weight: normal;
+        text-align: right;
+      }
+      tfoot .grand_total {
+        font-weight: bold;
+      }
+      tfoot tr:first-child td,
+      tfoot tr:first-child th {
+        border-top: 1px solid #666;
+        padding-top: 10px;
+      }
+      footer {
+        display: table;
+        position: fixed;
+        bottom: 0;
+        margin-bottom: 50px;
+        width: 640px;
+      }
+      @media screen {
+        footer {
+          display: none; {# fixme #}
+          width: 700px;
+        }
+      }
+      footer ul {
+        display: table-cell;
+        list-style: none;
+        padding-left: 0;
+      }
+      footer ul.left {
+        text-align: left;
+        width: 33%;
+      }
+      footer ul.center {
+        text-align: center;
+      }
+      footer ul.right {
+        text-align: right;
+        width: 33%;
+      }
+      footer ul li {
+        display: inline-block;
+      }
+      @media print {
+        body {
+          margin: 30px;
+        }
+      }
+      @media screen {
+        body {
+          background: #333;
+        }
+        .doc {
+          background: white;
+          border: 1px black outset;
+          margin: 0 auto;
+          padding: 50px;
+          width: 700px;
+        }
+      }
+    </style>
     <title>{{ title }}</title>
   </head>
   <body>
-    <address class="sender"><p>{{ sender|replace({"\n": '</p><p>'})|raw }}</p></address>
-    <div class="in-window sender">{{ sender|replace({"\n": ' – ' }) }}</address>
-    <address class="receiver">{{ receiver }}</address>
-    <header>
-      <div class="document-type">{{ documentType }}</div>
-      <div class="increment-no">{{ incrementNo }}</div>
-      <div class="date">{{ date }}</div>
-    </header>
-    {% if intro %}<p class="intro text">{{ intro|replace({"\n": '<br>'})|raw }}</p>{% endif %}
-    <table>
-      <thead>
-        <tr>
-          {% for key, name in columns %}
-          <th class="{{ key }}">{{ name }}</th>
-          {% endfor %}
-        </tr>
-      </thead>
-      <tbody>
-        {% for row in rows %}
-          <tr class="row">
+    <div class="doc">
+      <address class="sender"><p>{{ sender|replace({"\n": '</p><p>'})|raw }}</p></address>
+      <address class="in-window sender">{{ sender|replace({"\n": ' – ' }) }}</address>
+      <address class="receiver"><p>{{ receiver|replace({"\n": '</p><p>'})|raw }}</p></address>
+      <header>
+        <div class="document-type">{{ documentType }}</div>
+        <div class="increment-no">{{ incrementNo }}</div>
+        <div class="date">{{ date }}</div>
+      </header>
+      {% if intro %}<p class="intro text">{{ intro|replace({"\n": '<br>'})|raw }}</p>{% endif %}
+      <table class="items">
+        <thead>
+          <tr>
             {% for key, name in columns %}
-            <td class="{{ key }}" title="{{ name }}">{{ row[key] }}</td>
+            <th class="{{ key }}">{{ name }}</th>
             {% endfor %}
           </tr>
-        {% endfor %}
-      </tbody>
-      <tfoot>
-        {% for key, total in totals %}
-          <tr>
-            <td class="{{ key }} label">{{ total.title }}</td>
-            <td class="{{ key }} value">{{ total.value }}</td>
-          </tr>
-        {% endfor %}
-      </tfoot>
-    </table>
-    {% if outro %}<p class="outro text">{{ outro|replace({"\n": '<br>'})|raw }}</p>{% endif %}
-    {% if footer %}
-    <footer>
-      {% if footer.left %}
-        <ul class="left">
-          {% for item, key in footer.left %}
-            <li class="{{ item.key }}">{{ item.text }}
+        </thead>
+        <tbody>
+          {% for row in rows %}
+            <tr class="row">
+              {% for key, name in columns %}
+              <td class="{{ key }}" title="{{ name }}">{{ row[key] }}</td>
+              {% endfor %}
+            </tr>
           {% endfor %}
-        </ul>
-      {% endif %}
-      {% if footer.center %}
-        <ul class="center">
-          {% for item, key in footer.center %}
-            <li class="{{ item.key }}">{{ item.text }}
+        </tbody>
+        <tfoot>
+          {% for key, total in totals %}
+            <tr>
+              <th class="{{ key }} label" colspan="{{ columns|length - 1 }}">{{ total.title }}</td>
+              <td class="{{ key }} value">{{ total.value }}</td>
+            </tr>
           {% endfor %}
-        </ul>
+        </tfoot>
+      </table>
+      {% if outro %}<p class="outro text">{{ outro|replace({"\n": '<br>'})|raw }}</p>{% endif %}
+      {% if footer %}
+      <footer>
+        {% if footer.left %}
+          <ul class="left">
+            {% for key, item in footer.left %}
+              <li class="{{ key }}">{{ item }}
+            {% endfor %}
+          </ul>
+        {% endif %}
+        {% if footer.center %}
+          <ul class="center">
+            {% for key, item in footer.center %}
+              <li class="{{ key }}">{{ item }}
+            {% endfor %}
+          </ul>
+        {% endif %}
+        {% if footer.right %}
+          <ul class="right">
+            {% for key, item in footer.right %}
+              <li class="{{ key }}">{{ item }}
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </footer>
       {% endif %}
-      {% if footer.right %}
-        <ul class="right">
-          {% for item, key in footer.right %}
-            <li class="{{ item.key }}">{{ item.text }}
-          {% endfor %}
-        </ul>
-      {% endif %}
-    </footer>
-    {% endif %}
+    </div>
   </body>
 </html>
