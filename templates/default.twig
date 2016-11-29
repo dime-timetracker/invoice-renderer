@@ -127,8 +127,7 @@
       <address class="in-window sender">{{ sender|replace({"\n": ' – ' }) }}</address>
       <address class="receiver"><p>{{ receiver|replace({"\n": '</p><p>'})|raw }}</p></address>
       <header>
-        <div class="document-type">{{ documentType }}</div>
-        <div class="increment-no">{{ incrementNo }}</div>
+        <div class="document-type">{{ subject }}</div>
         <div class="date">{{ date }}</div>
       </header>
       {% if intro %}<p class="intro text">{{ intro|replace({"\n": '<br>'})|raw }}</p>{% endif %}
